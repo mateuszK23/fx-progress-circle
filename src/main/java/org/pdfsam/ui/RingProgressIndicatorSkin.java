@@ -19,7 +19,6 @@ import javafx.animation.Animation;
 import javafx.animation.Interpolator;
 import javafx.animation.RotateTransition;
 import javafx.scene.Node;
-import javafx.scene.control.Label;
 import javafx.scene.control.Skin;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
@@ -31,12 +30,11 @@ import javafx.util.Duration;
  * Skin of the ring progress indicator where an arc grows and by the progress value up to 100% where the arc becomes a ring.
  * 
  * @author Andrea Vacondio
- *
+ * This class was modified by Mateusz Koscielniak - mak98
  */
 public class RingProgressIndicatorSkin implements Skin<RingProgressIndicator> {
 
     private final RingProgressIndicator indicator;
-    private final Label percentLabel = new Label();
     private final Circle innerCircle = new Circle();
     private final Circle outerCircle = new Circle();
     private final StackPane container = new StackPane();
@@ -61,9 +59,8 @@ public class RingProgressIndicatorSkin implements Skin<RingProgressIndicator> {
             initIndeterminate(newVal);
         });
         this.indicator.progressProperty().addListener((o, oldVal, newVal) -> {
-            if (newVal.intValue() >= 0) {
-                setProgressLabel(newVal.intValue());
-                fillerArc.setLength(newVal.intValue() * -3.6);
+            if (newVal.floatValue() >= 0) {
+                fillerArc.setLength(newVal.floatValue() * -3.6);
             }
         });
         this.indicator.ringWidthProperty().addListener((o, oldVal, newVal) -> {
@@ -77,7 +74,6 @@ public class RingProgressIndicatorSkin implements Skin<RingProgressIndicator> {
         });
         initTransition();
         initIndeterminate(indicator.isIndeterminate());
-        initLabel(indicator.getProgress());
         indicator.visibleProperty().addListener((o, oldVal, newVal) -> {
             if (newVal && this.indicator.isIndeterminate()) {
                 transition.play();
@@ -85,13 +81,7 @@ public class RingProgressIndicatorSkin implements Skin<RingProgressIndicator> {
                 transition.pause();
             }
         });
-        container.getChildren().addAll(fillerArc, outerCircle, innerCircle, percentLabel);
-    }
-
-    private void setProgressLabel(int value) {
-        if (value >= 0) {
-            percentLabel.setText(String.format("%d%%", value));
-        }
+        container.getChildren().addAll(fillerArc, outerCircle, innerCircle);
     }
 
     private void initTransition() {
@@ -127,13 +117,7 @@ public class RingProgressIndicatorSkin implements Skin<RingProgressIndicator> {
         innerCircle.setRadius(innerCircleRadius);
     }
 
-    private void initLabel(int value) {
-        setProgressLabel(value);
-        percentLabel.getStyleClass().add("circleindicator-label");
-    }
-
     private void initIndeterminate(boolean newVal) {
-        percentLabel.setVisible(!newVal);
         if (newVal) {
             fillerArc.setLength(360);
             fillerArc.getStyleClass().add("indeterminate");

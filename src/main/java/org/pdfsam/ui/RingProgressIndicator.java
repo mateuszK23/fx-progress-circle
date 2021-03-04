@@ -24,18 +24,19 @@ import javafx.css.CssMetaData;
 import javafx.css.Styleable;
 import javafx.css.StyleableDoubleProperty;
 import javafx.css.StyleableProperty;
+import javafx.css.converter.SizeConverter;
 import javafx.scene.control.Control;
 import javafx.scene.control.Skin;
 
-import com.sun.javafx.css.converters.SizeConverter;
 
 /**
  * Progress indicator showing a filling arc.
  * 
  * @author Andrea Vacondio
- *
+ * This class was modified by Mateusz Koscielniak - mak98
  */
-public class RingProgressIndicator extends ProgressCircleIndicator {
+public class RingProgressIndicator extends org.pdfsam.ui.ProgressCircleIndicator {
+
     public RingProgressIndicator() {
         this.getStylesheets().add(RingProgressIndicator.class.getResource("ringprogress.css").toExternalForm());
         this.getStyleClass().add("ringindicator");
@@ -43,7 +44,7 @@ public class RingProgressIndicator extends ProgressCircleIndicator {
 
     @Override
     protected Skin<?> createDefaultSkin() {
-        return new RingProgressIndicatorSkin(this);
+        return new org.pdfsam.ui.RingProgressIndicatorSkin(this);
     }
 
     public final void setRingWidth(int value) {
@@ -96,7 +97,7 @@ public class RingProgressIndicator extends ProgressCircleIndicator {
         public static final List<CssMetaData<? extends Styleable, ?>> STYLEABLES;
         static {
             final List<CssMetaData<? extends Styleable, ?>> styleables = new ArrayList<>(Control.getClassCssMetaData());
-            styleables.addAll(ProgressCircleIndicator.getClassCssMetaData());
+            styleables.addAll(org.pdfsam.ui.ProgressCircleIndicator.getClassCssMetaData());
             styleables.add(RING_WIDTH);
             STYLEABLES = Collections.unmodifiableList(styleables);
         }
